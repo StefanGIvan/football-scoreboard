@@ -6,7 +6,7 @@ function computeGameScore(team1, team2, playersWhoScore) {
   let team2Score = 0;
 
   for (scoreIndex = 0; scoreIndex <= playersWhoScore.length - 1; scoreIndex++) {
-    for (team1Index = 0; j <= team1.length - 1; team1Index++) {
+    for (team1Index = 0; team1Index <= team1.length - 1; team1Index++) {
       if (playersWhoScore[scoreIndex] === team1[team1Index]) {
         team1Score++;
         break;
@@ -23,5 +23,20 @@ function computeGameScore(team1, team2, playersWhoScore) {
 
   return "Team1" + " " + team1Score + " - " + team2Score + " " + "Team2";
 }
+
+const team1 = ["Dembele", "Gomez", "Zouma"];
+const team2 = ["Arnautovic", "Salah", "Mane"];
+
+const playersWhoScore = [
+  "Dembele",
+  "Zouma",
+  "Dembele",
+  "Arnautovic",
+  "Gomez",
+  "Gomez",
+  "Dembele",
+];
+
+console.log(computeGameScore(team1, team2, playersWhoScore));
 
 //output: Team1 X - Y team2
