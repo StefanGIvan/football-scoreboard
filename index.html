@@ -3,14 +3,59 @@
     <meta charset="utf-8" />
     <title>Football Scoreboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="./assets/football.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <!--embedded font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Patrick+Hand&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    <div class="teams">
-      <div>Team 1</div>
-      <div>Team 2</div>
-    </div>
-    <div class="scoreboard"></div>
+    <main id="card">
+      <div class="card-header">
+        <p class="league">Premier League</p>
+        <p class="stadium">Emirates Stadium</p>
+        <p class="week">Week 3</p>
+      </div>
+
+      <section class="score-row">
+        <div class="team-left">
+          <img class="team1-img" src="./assets/team1.png" />
+          <p class="team1-name">Team 1</p>
+          <p class="home">Home</p>
+        </div>
+
+        <div class="score">
+          <!--Inject JS-->
+          <span class="team1-score">0</span>
+          <span class="dash">-</span>
+          <!--Inject JS-->
+          <span class="team2-score">0</span>
+        </div>
+
+        <div class="team-right">
+          <img class="team2-img" src="./assets/team2.png" />
+          <p class="team2-name">Team 2</p>
+          <p class="away">Away</p>
+        </div>
+      </section>
+
+      <!--Inject JS-->
+      <section class="goal-scorers-row">
+        <ul class="scorers-left">
+          <li class="scorers-left-list"></li>
+        </ul>
+        <ul class="scorers-right">
+          <li class="scorers-right-list"></li>
+        </ul>
+      </section>
+    </main>
+
     <script src="footballScoreSolution2.js"></script>
   </body>
 </html>

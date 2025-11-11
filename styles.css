@@ -1,0 +1,153 @@
+:root {
+  --white: #ededed;
+  --blue: #2756c8;
+  --dark-blue: #1e3a5f;
+  --blue-shadow: #2b6ff5;
+  --dark-gray: #777777;
+}
+
+body {
+  background: var(--white);
+  font-family: "Patrick Hand";
+}
+
+#card {
+  width: 720px;
+  margin: 60px auto;
+  background-color: var(--blue);
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0px 10px 30px var(--blue-shadow);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--white);
+}
+
+.card-header .league {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--white);
+}
+
+.card-header .stadium {
+  font-size: 20px;
+  color: var(--white);
+}
+
+.card-header .week {
+  font-size: 16px;
+  color: var(--dark-gray);
+}
+
+.score-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.team-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team1-img {
+  height: 150px;
+  width: 150px;
+}
+
+.team1-name {
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
+.home {
+  margin-top: 0;
+  font-size: 16px;
+  color: var(--dark-gray);
+}
+
+/*Score*/
+.score {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 12px;
+  font-weight: 800;
+  font-size: 100px;
+}
+
+.team1-score {
+  color: var(--white);
+}
+
+.dash {
+  opacity: 0.7;
+  color: var(--white);
+}
+
+.team2-score {
+  color: var(--white);
+}
+
+.team-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team2-img {
+  height: 150px;
+  width: 150px;
+}
+
+.team2-name {
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
+.away {
+  margin: 0;
+  font-size: 16px;
+  color: var(--dark-gray);
+}
+
+.goal-scorers-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 40px;
+  font-size: 20px;
+  margin: 0;
+  padding: 0 10px 0 0;
+}
+
+.scorers-left {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.scorers-right {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: right;
+}
+
+.scorers-left-list,
+.scorers-right-list {
+  margin: 4px 0;
+  font-size: 16px;
+  color: var(--white);
+}
+
+.minute {
+  font-size: 16px;
+  margin-left: 8px;
+  color: var(--dark-gray);
+}

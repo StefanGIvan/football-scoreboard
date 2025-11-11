@@ -1,3 +1,5 @@
+console.log("JS loaded");
+
 function computeGameScore(team1, team2, playersWhoScore) {
   let scoreIndex;
   let team1Index;
@@ -5,10 +7,13 @@ function computeGameScore(team1, team2, playersWhoScore) {
   let team1Score = 0;
   let team2Score = 0;
   let uniquePlayersIndex;
-  let rememberPlayer;
-  let uniquePlayers = [];
-  let playerGoalsCounter = [];
-  let teamOfPlayer = [];
+  let scoredPlayer;
+  let uniquePlayers = []; // can log all the players that participated
+  let playerGoalsCounter = []; // can log how many goals a player scored
+  let teamOfPlayer = []; // can log from which team a player is from
+  let minuteOfGoal = [];
+  let team1ScoredList = [];
+  let team2ScoredList = [];
 
   // fill the uniquePlayers array from team1
   for (team1Index = 0; team1Index < team1.length; team1Index++) {
@@ -26,7 +31,8 @@ function computeGameScore(team1, team2, playersWhoScore) {
 
   // go through the playersWhoScore array
   for (scoreIndex = 0; scoreIndex <= playersWhoScore.length - 1; scoreIndex++) {
-    rememberPlayer = playersWhoScore[scoreIndex];
+    scoredPlayer = playersWhoScore[scoreIndex];
+    minuteOfGoal[scoreIndex] = randomMinute(); // assign a minute for the player who scored
 
     // go through the uniquePlayers array and in this way, add a player just once (to not iterate through 2 teams arrays)
     // have a playerGoalsCounter array to know how many times a player scored
@@ -38,15 +44,20 @@ function computeGameScore(team1, team2, playersWhoScore) {
       uniquePlayersIndex++
     ) {
       // the player already scored once
-      if (uniquePlayers[uniquePlayersIndex] === rememberPlayer) {
-        // if we find the player, add a goal into the playerGoalsCounter array
-        playerGoalsCounter[uniquePlayersIndex]++;
+      if (uniquePlayers[uniquePlayersIndex] === scoredPlayer) {
+        playerGoalsCounter[uniquePlayersIndex]++; // if we find the player, add a goal into the playerGoalsCounter array
 
+        const goalScored = {
+          player: scoredPlayer,
+          minute: minuteOfGoal[scoreIndex],
+        };
         // we determine from which team that player is from and add a goal for that team
         if (teamOfPlayer[uniquePlayersIndex] === 1) {
           team1Score++;
+          team1ScoredList.push(goalScored);
         } else {
           team2Score++;
+          team2ScoredList.push(goalScored);
         }
 
         break;
@@ -54,20 +65,81 @@ function computeGameScore(team1, team2, playersWhoScore) {
     }
   }
 
-  return "Team1" + " " + team1Score + " - " + team2Score + " " + "Team2";
+  //sort the minutes of the players
+  team1ScoredList.sort((a, b) => a.minute - b.minute);
+  team2ScoredList.sort((a, b) => a.minute - b.minute);
+
+  return {
+    team1Score,
+    team2Score,
+    team1ScoredList,
+    team2ScoredList,
+  };
 }
 
-const team1 = ["Dembele", "Gomez", "Zouma"];
-const team2 = ["Arnautovic", "Salah", "Mane"];
-const playersWhoScore = [
-  "Dembele",
-  "Zouma",
-  "Dembele",
-  "Arnautovic",
-  "Gomez",
-  "Gomez",
-  "Dembele",
+function randomMinute() {
+  return Math.floor(Math.random() * 90) + 1;
+}
+
+const team1 = [
+  "Raya",
+  "White",
+  "Saliba",
+  "Gabriel",
+  "Zinchenko",
+  "Rice",
+  "Ødegaard",
+  "Partey",
+  "Saka",
+  "Martinelli",
+  "Jesus",
 ];
 
-console.log(computeGameScore(team1, team2, playersWhoScore));
-// -> "Team1 6 - 1 Team2"
+const team2 = [
+  "Onana",
+  "Dalot",
+  "Varane",
+  "Martinez",
+  "Shaw",
+  "Casemiro",
+  "Bruno Fernandes",
+  "Eriksen",
+  "Antony",
+  "Rashford",
+  "Højlund",
+];
+
+const playersWhoScore = ["Saliba", "Bruno Fernandes", "Antony", "Saka", "Saka"];
+
+const resultOfTable = computeGameScore(team1, team2, playersWhoScore);
+
+// inject scoreboard score
+document.querySelector(".team1-score").textContent = resultOfTable.team1Score;
+document.querySelector(".team2-score").textContent = resultOfTable.team2Score;
+
+const team1ScorersUl = document.querySelector(".scorers-left");
+const team2ScorersUl = document.querySelector(".scorers-right");
+
+for (
+  team1ListIndex = 0;
+  team1ListIndex <= resultOfTable.team1ScoredList.length - 1;
+  team1ListIndex++
+) {
+  const goal = resultOfTable.team1ScoredList[team1ListIndex];
+  const scorerLi = document.createElement("li");
+  scorerLi.className = "scorers-left-list";
+  scorerLi.textContent = `${goal.player} ⚽ ${goal.minute}'`;
+  team1ScorersUl.appendChild(scorerLi);
+}
+
+for (
+  team2ListIndex = 0;
+  team2ListIndex <= resultOfTable.team2ScoredList.length - 1;
+  team2ListIndex++
+) {
+  const goal = resultOfTable.team2ScoredList[team2ListIndex];
+  const scorerLi = document.createElement("li");
+  scorerLi.className = "scorers-right-list";
+  scorerLi.textContent = `${goal.player} ⚽ ${goal.minute}'`;
+  team2ScorersUl.appendChild(scorerLi);
+}
