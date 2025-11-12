@@ -24,6 +24,7 @@ const computeGameState = (team1, team2, playersWhoScore) => {
   minutesGoals.sort((a, b) => a - b);
 
   // define 2 objects for each team that keep track if a player has already scored
+  // use this so we don't loop through the scoreTean array
   let team1Map = {};
   let team2Map = {};
 

@@ -14,19 +14,44 @@ class Match {
 
     this.additionalInformations = additionalInformations;
 
-    this.team1Goals = [];
-    this.team2Goals = [];
+    this.team1Goals = {};
+    this.team2Goals = {};
 
     this.team1Score = 0;
     this.team2Score = 0;
   }
 
+  // for future use
+  randomMinute() {
+    return Math.floor(Math.random() * 90) + 1;
+  }
+
+  // for future use
+  sortGoals() {
+    Object.values(this.team1Goals).forEach((goal) =>
+      goal.minute.sort((a, b) => a - b)
+    );
+    Object.values(this.team2Goals).forEach((goal) =>
+      goal.minute.sort((a, b) => a - b)
+    );
+  }
+
   addGoal({ playerName, minute }) {
     if (this.team1.players.includes(playerName)) {
-      this.team1Goals.push({ playerName, minute });
+      // if that player didn't score already
+      if (!this.team1Goals[playerName]) {
+        this.team1Goals[playerName] = { minute: [] };
+      }
+
+      this.team1Goals[playerName].minute.push(minute);
       this.team1Score++;
     } else if (this.team2.players.includes(playerName)) {
-      this.team2Goals.push({ playerName, minute });
+      // if that player didn't score already
+      if (!this.team2Goals[playerName]) {
+        this.team2Goals[playerName] = { minute: [] };
+      }
+
+      this.team2Goals[playerName].minute.push(minute);
       this.team2Score++;
     } else {
       console.error("Player not found: ", playerName);
