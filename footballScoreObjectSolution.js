@@ -33,7 +33,7 @@ const computeGameState = (team1, team2, playersWhoScore) => {
 
     if (isInTeam1(scorer)) {
       if (!team1Map[scorer]) {
-        team1Map[scorer] = { player: scorer, minute: [] };
+        team1Map[scorer] = { minute: [] };
         scoreTeam1.push(team1Map[scorer]);
       }
       // if he's already in the array, means he scored again, so we need to push the minute he scored again
@@ -41,7 +41,7 @@ const computeGameState = (team1, team2, playersWhoScore) => {
       team1Goals += 1;
     } else if (isInTeam2(scorer)) {
       if (!team2Map[scorer]) {
-        team2Map[scorer] = { player: scorer, minute: [] };
+        team2Map[scorer] = { minute: [] };
         scoreTeam2.push(team2Map[scorer]);
       }
       // if he's already in the array, means he scored again, so we need to push the minute he scored again
