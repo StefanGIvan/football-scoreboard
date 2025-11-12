@@ -1,13 +1,6 @@
-console.log("JS loaded");
-
 function computeGameScore(team1, team2, playersWhoScore) {
-  let scoreIndex;
-  let team1Index;
-  let team2Index;
   let team1Score = 0;
   let team2Score = 0;
-  let uniquePlayersIndex;
-  let scoredPlayer;
   let uniquePlayers = []; // can log all the players that participated
   let playerGoalsCounter = []; // can log how many goals a player scored
   let teamOfPlayer = []; // can log from which team a player is from
@@ -15,23 +8,25 @@ function computeGameScore(team1, team2, playersWhoScore) {
   let team1ScoredList = [];
   let team2ScoredList = [];
 
+  const teamByPlayer = {};
+
   // fill the uniquePlayers array from team1
-  for (team1Index = 0; team1Index < team1.length; team1Index++) {
+  for (let team1Index = 0; team1Index < team1.length; team1Index++) {
     uniquePlayers.push(team1[team1Index]);
     playerGoalsCounter.push(0);
     teamOfPlayer.push(1);
   }
 
   // fill the uniquePlayers array from team2
-  for (team2Index = 0; team2Index < team2.length; team2Index++) {
+  for (let team2Index = 0; team2Index < team2.length; team2Index++) {
     uniquePlayers.push(team2[team2Index]);
     playerGoalsCounter.push(0);
     teamOfPlayer.push(2);
   }
 
   // go through the playersWhoScore array
-  for (scoreIndex = 0; scoreIndex <= playersWhoScore.length - 1; scoreIndex++) {
-    scoredPlayer = playersWhoScore[scoreIndex];
+  for (let scoreIndex = 0; scoreIndex < playersWhoScore.length; scoreIndex++) {
+    let scoredPlayer = playersWhoScore[scoreIndex];
     minuteOfGoal[scoreIndex] = randomMinute(); // assign a minute for the player who scored
 
     // go through the uniquePlayers array and in this way, add a player just once (to not iterate through 2 teams arrays)
@@ -39,8 +34,8 @@ function computeGameScore(team1, team2, playersWhoScore) {
     // a player can't be in both teams, because we can't determine that from the playersWhoScore array
     // we know how many times a player has scored (array version)
     for (
-      uniquePlayersIndex = 0;
-      uniquePlayersIndex <= uniquePlayers.length - 1;
+      let uniquePlayersIndex = 0;
+      uniquePlayersIndex < uniquePlayers.length;
       uniquePlayersIndex++
     ) {
       // the player already scored once
@@ -122,7 +117,7 @@ const team2ScorersUl = document.querySelector(".scorers-right");
 
 for (
   team1ListIndex = 0;
-  team1ListIndex <= resultOfTable.team1ScoredList.length - 1;
+  team1ListIndex < resultOfTable.team1ScoredList.length;
   team1ListIndex++
 ) {
   const goal = resultOfTable.team1ScoredList[team1ListIndex];
@@ -134,7 +129,7 @@ for (
 
 for (
   team2ListIndex = 0;
-  team2ListIndex <= resultOfTable.team2ScoredList.length - 1;
+  team2ListIndex < resultOfTable.team2ScoredList.length;
   team2ListIndex++
 ) {
   const goal = resultOfTable.team2ScoredList[team2ListIndex];
