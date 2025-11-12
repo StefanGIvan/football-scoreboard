@@ -52,6 +52,9 @@ const computeGameState = (team1, team2, playersWhoScore) => {
     }
   });
 
+  console.log("team1Map:", team1Map);
+  console.log("team2Map:", team2Map);
+
   // Final scoreboard string
   return `${team1.name} ${team1Goals} - ${team2Goals} ${team2.name}`;
 };
