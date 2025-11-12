@@ -2,6 +2,8 @@ const computeGameState = (team1, team2, playersWhoScore) => {
   let scoreTeam1 = [];
   let scoreTeam2 = [];
   let minutesGoals = [];
+  let team1Goals = 0;
+  let team2Goals = 0;
 
   const randomMinute = () => Math.floor(Math.random() * 90) + 1;
 
@@ -21,21 +23,37 @@ const computeGameState = (team1, team2, playersWhoScore) => {
   // sort minutes ascending
   minutesGoals.sort((a, b) => a - b);
 
+  // define 2 objects for each team that keep track if a player has already scored
+  let team1Map = {};
+  let team2Map = {};
+
   // assign sorted minutes to scorers chronologically
   playersWhoScore.forEach((scorer, index) => {
-    const goalData = { player: scorer, minute: minutesGoals[index] };
+    const minuteScored = minutesGoals[index];
 
     if (isInTeam1(scorer)) {
-      scoreTeam1.push(goalData);
+      if (!team1Map[scorer]) {
+        team1Map[scorer] = { player: scorer, minute: [] };
+        scoreTeam1.push(team1Map[scorer]);
+      }
+      // if he's already in the array, means he scored again, so we need to push the minute he scored again
+      team1Map[scorer].minute.push(minuteScored);
+      team1Goals += 1;
     } else if (isInTeam2(scorer)) {
-      scoreTeam2.push(goalData);
+      if (!team2Map[scorer]) {
+        team2Map[scorer] = { player: scorer, minute: [] };
+        scoreTeam2.push(team2Map[scorer]);
+      }
+      // if he's already in the array, means he scored again, so we need to push the minute he scored again
+      team2Map[scorer].minute.push(minuteScored);
+      team2Goals += 1;
     } else {
-      console.error("Scorer not found:", scorer);
+      console.error("Scorer not found: ", scorer);
     }
   });
 
   // Final scoreboard string
-  return `${team1.name} ${scoreTeam1.length} - ${scoreTeam2.length} ${team2.name}`;
+  return `${team1.name} ${team1Goals} - ${team2Goals} ${team2.name}`;
 };
 
 const team1 = {
