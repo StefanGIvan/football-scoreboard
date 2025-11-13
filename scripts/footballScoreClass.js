@@ -27,13 +27,13 @@ class Match {
 
   // generate a random minute a player has scored for the match
   randomMinute() {
-    return Math.floor(Math.random() * 90) + 1;
+    return Math.floor(Math.random() * 91);
   }
 
   // method that checks if minute is a number (normal time) or a string (extra time)
   isMinuteFirstHalf(minute) {
     if (typeof minute === "number") {
-      return minute >= 1 && minute <= 45;
+      return minute >= 0 && minute <= 45;
     }
 
     // checks if a string begins with "45+" (in order to be valid for first half)
@@ -165,10 +165,10 @@ class Match {
   // sorts the minutes inside team1Goals/team2Goals for a player
   sortGoals() {
     Object.values(this.team1Goals).forEach((goal) =>
-      goal.minute.sort((a, b) => a - b)
+      goal.minute.sort((a, b) => this.parseMinute(a) - this.parseMinute(b))
     );
     Object.values(this.team2Goals).forEach((goal) =>
-      goal.minute.sort((a, b) => a - b)
+      goal.minute.sort((a, b) => this.parseMinute(a) - this.parseMinute(b))
     );
   }
 
