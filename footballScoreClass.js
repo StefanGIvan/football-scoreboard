@@ -26,7 +26,33 @@ class Match {
     return Math.floor(Math.random() * 90) + 1;
   }
 
-  // for future use
+  //get the minutes in chronological order (sorts the goals of the whole match)
+  // make a new array to sort
+  getTimeline() {
+    const timeline = [];
+
+    for (const player in this.team1Goals) {
+      const minutes = this.team1Goals[player].minute;
+
+      minutes.forEach((minute) => {
+        timeline.push({ player, minute: minute, team: this.team1.name });
+      });
+    }
+
+    for (const player in this.team2Goals) {
+      const minutes = this.team2Goals[player].minute;
+
+      minutes.forEach((minute) => {
+        timeline.push({ player, mninute: minute, team: this.team2.name });
+      });
+    }
+
+    timeline.sort((a, b) => a.minute - b.minute);
+
+    return timeline;
+  }
+
+  // for future use (sorts the minutes inside team1Goals/team2Goals for a player)
   sortGoals() {
     Object.values(this.team1Goals).forEach((goal) =>
       goal.minute.sort((a, b) => a - b)
