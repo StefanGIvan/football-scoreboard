@@ -198,6 +198,18 @@ class Match {
     // assign a random minute if minute is false
     const goalMinute = minute ?? this.randomMinute();
 
+    // validate the minute (goalMinute) for numbers and strings
+    const validNumber =
+      typeof goalMinute === "number" && goalMinute >= 0 && goalMinute <= 90;
+    const validString =
+      typeof goalMinute === "string" &&
+      (goalMinute.startsWith("45+") || goalMinute.startsWith("90+"));
+
+    if (!validNumber && !validString) {
+      console.error("Invalid minute: ", goalMinute);
+      return;
+    }
+
     if (this.team1.players.includes(playerName)) {
       // if that player didn't score already
       if (!this.team1Goals[playerName]) {
@@ -272,3 +284,6 @@ match.getScore();
 match.getFirstHalfScore();
 match.getSecondHalfScore();
 match.getTimeline();
+
+const arsenalGoals = match.getTeamGoals(1); // get goals for the first team
+const unitedGoals = match.getTeamGoals(2); // get goals for the second team
