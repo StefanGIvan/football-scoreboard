@@ -27,7 +27,21 @@ class Match {
 
   // generate a random minute a player has scored for the match
   randomMinute() {
-    return Math.floor(Math.random() * 95) + 1;
+    return Math.floor(Math.random() * 90) + 1;
+  }
+
+  // method that checks if minute is a number (normal time) or a string (extra time)
+  isMinuteFirstHalf(minute) {
+    if (typeof minute === "number") {
+      return minute >= 1 && minute <= 45;
+    }
+
+    // checks if a string begins with "45+" (in order to be valid for first half)
+    if (typeof minute === "string") {
+      return minute.startsWith("45+");
+    }
+
+    return false;
   }
 
   // get the score for both teams at first halftime
@@ -40,7 +54,7 @@ class Match {
     for (const playerName in this.team1Goals) {
       const minuteGoal = this.team1Goals[playerName].minute;
       for (const minute of minuteGoal) {
-        if (minute <= 48) {
+        if (this.isMinuteFirstHalf(minute)) {
           team1HalftimeScore++;
         }
       }
@@ -50,7 +64,7 @@ class Match {
     for (const playerName in this.team2Goals) {
       const minuteGoal = this.team2Goals[playerName].minute;
       for (const minute of minuteGoal) {
-        if (minute <= 48) {
+        if (this.isMinuteFirstHalf(minute)) {
           team2HalftimeScore++;
         }
       }
@@ -58,6 +72,20 @@ class Match {
 
     // return the result
     return `${this.team1.name} ${team1HalftimeScore} - ${this.team2.name} ${team2HalftimeScore}`;
+  }
+
+  // method that checks if minute is a number (normal time) or a string (extra time)
+  isMinuteSecondHalf(minute) {
+    if (typeof minute === "number") {
+      return minute >= 46 && minute <= 90;
+    }
+
+    // checks if a string begins with "90+" (in order to be valid for second half)
+    if (typeof minute === "string") {
+      return minute.startsWith("90+");
+    }
+
+    return false;
   }
 
   // get the score for both teams at second halftime
@@ -70,7 +98,7 @@ class Match {
     for (const playerName in this.team1Goals) {
       const minuteGoal = this.team1Goals[playerName].minute;
       for (const minute of minuteGoal) {
-        if (minute <= 95) {
+        if (this.isMinuteSecondHalf(minute)) {
           team1SecondHalfScore++;
         }
       }
@@ -80,7 +108,7 @@ class Match {
     for (const playerName in this.team2Goals) {
       const minuteGoal = this.team2Goals[playerName].minute;
       for (const minute of minuteGoal) {
-        if (minute <= 95) {
+        if (this.isMinuteSecondHalf(minute)) {
           team2SecondHalfScore++;
         }
       }
@@ -90,19 +118,15 @@ class Match {
     return `${this.team1.name} ${team1SecondHalfScore} - ${this.team2.name} ${team2SecondHalfScore}`;
   }
 
-  // minutes are stored the same
-  // format the extra time minutes to be displayed differently
-  formatMinute(minute) {
-    if (minute > 45 && minute <= 48) {
-      return `45 + ${minute - 45}`;
+  // function to help with sorting strings
+  parseMinute(minute) {
+    if (typeof minute === "number") {
+      return minute;
     }
 
-    if (minute > 90 && minute <= 95) {
-      return `90 + ${minute - 90}`;
-    }
-
-    // default for normal minutes
-    return minute;
+    // used destructuring to attribute for example: 45 and 2
+    const [base, added] = minute.split("+").map(Number);
+    return base + added;
   }
 
   // get the minutes in chronological order (sorts the goals of the whole match)
@@ -131,7 +155,9 @@ class Match {
     }
 
     // finally, sort the array for minutes
-    timeline.sort((a, b) => a.minute - b.minute);
+    timeline.sort(
+      (a, b) => this.parseMinute(a.minute) - this.parseMinute(b.minute)
+    );
 
     return timeline;
   }
