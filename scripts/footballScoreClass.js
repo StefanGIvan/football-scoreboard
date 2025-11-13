@@ -118,7 +118,7 @@ class Match {
     return `${this.team1.name} ${team1SecondHalfScore} - ${this.team2.name} ${team2SecondHalfScore}`;
   }
 
-  // function to help with sorting strings
+  // method to help with sorting strings
   parseMinute(minute) {
     if (typeof minute === "number") {
       return minute;
@@ -170,6 +170,27 @@ class Match {
     Object.values(this.team2Goals).forEach((goal) =>
       goal.minute.sort((a, b) => this.parseMinute(a) - this.parseMinute(b))
     );
+  }
+
+  // method to get team goals chronologically (player, minute, team)
+  getTeamGoals(teamNumber) {
+    const goals = [];
+    const teamGoals = teamNumber === 1 ? this.team1Goals : this.team2Goals;
+    const teamName = teamNumber === 1 ? this.team1.name : this.team2.name;
+
+    for (const player in teamGoals) {
+      const minuteGoal = teamGoals[player].minute;
+
+      minuteGoal.forEach((minute) => {
+        goals.push({ player, minute, team: teamName });
+      });
+    }
+
+    goals.sort(
+      (a, b) => this.parseMinute(a.minute) - this.parseMinute(b.minute)
+    );
+
+    return goals;
   }
 
   // create an object for a player with the minutes when he scorede, without deduplicating the object
@@ -242,4 +263,12 @@ const team2 = {
 
 const match = new Match(team1, team2, additionalInformations);
 match.addGoal({ player: "Saka", minute: 23 });
+match.addGoal({ playerName: "Saka", minute: 0 }); // first minute
+match.addGoal({ playerName: "Saka", minute: "45+2" }); // first half extra
+match.addGoal({ playerName: "Rashford", minute: 50 }); // second half
+match.addGoal({ playerName: "Bruno", minute: "90+3" }); // second half extra
+
 match.getScore();
+match.getFirstHalfScore();
+match.getSecondHalfScore();
+match.getTimeline();
