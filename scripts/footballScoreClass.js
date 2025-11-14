@@ -24,16 +24,22 @@ class Match {
     this.team1Score = 0;
     this.team2Score = 0;
   }
-  // method that checks if minute is a number (normal time) or a string (extra time)
+
+  scoreString(scoreTeam1, scoreTeam2) {
+    return `${scoreTeam1} - ${scoreTeam2}`;
+  }
+  // method that checks if minute is a string for normal time & extra time
   // if that minute is part of first half
   isMinuteFirstHalf(minute) {
-    if (typeof minute === "number") {
-      return minute >= 0 && minute <= 45;
-    }
-
-    // checks if a string begins with "45+" (in order to be valid for first half)
     if (typeof minute === "string") {
-      return minute.startsWith("45+");
+      if (minute.startsWith("45+")) {
+        return true;
+      }
+
+      const typeNumber = Number(minute);
+      return (
+        Number.isInteger(typeNumber) && typeNumber >= 0 && typeNumber <= 45
+      );
     }
 
     return false;
@@ -65,19 +71,22 @@ class Match {
     }
 
     // return the result
-    return `${this.team1.name} ${team1HalftimeScore} - ${team2HalftimeScore} ${this.team2.name}`;
+    return `${this.team1.name} ${this.scoreString(
+      team1HalftimeScore,
+      team2HalftimeScore
+    )} ${this.team2.name}`;
   }
 
-  // method that checks if minute is a number (normal time) or a string (extra time)
+  // method that checks if minute is a string for normal time & extra time
   // if that minute is part of second half
   isMinuteSecondHalf(minute) {
-    if (typeof minute === "number") {
-      return minute >= 46 && minute <= 90;
-    }
-
-    // checks if a string begins with "90+" (in order to be valid for second half)
     if (typeof minute === "string") {
-      return minute.startsWith("90+");
+      if (minute.startsWith("90+")) return true;
+
+      const typeNumber = Number(minute);
+      return (
+        Number.isInteger(typeNumber) && typeNumber >= 46 && typeNumber <= 90
+      );
     }
 
     return false;
@@ -109,18 +118,23 @@ class Match {
     }
 
     // return the result
-    return `${this.team1.name} ${team1SecondHalfScore} - ${team2SecondHalfScore} ${this.team2.name}`;
+    return `${this.team1.name} ${this.scoreString(
+      team1SecondHalfScore,
+      team2SecondHalfScore
+    )} ${this.team2.name}`;
   }
 
   // method to help with sorting strings
   parseMinute(minute) {
-    if (typeof minute === "number") {
-      return minute;
+    // case for extra time
+    if (minute.includes("+")) {
+      // used destructuring to attribute for example: 45 and 2 (string)
+      const [base, added] = minute.split("+").map(Number);
+      return base + added / 10;
     }
 
-    // used destructuring to attribute for example: 45 and 2 (string)
-    const [base, added] = minute.split("+").map(Number);
-    return base + added / 10;
+    const typeNumber = Number(minute);
+    return typeNumber;
   }
 
   // get the minutes in chronological order (sorts the goals of the whole match)
@@ -190,18 +204,25 @@ class Match {
   // create an object for a player with the minutes when he scorede, without deduplicating the object
   addGoal({ playerName, goalMinute }) {
     //check the player name
-    if (typeof playerName !== "string") {
-      console.error("Player name not valid: ", playerName);
+    if (typeof playerName !== "string" || playerName.trim() === "") {
+      console.error(
+        "Invalid player name provided/no player name provided: ",
+        playerName
+      );
+
+      return;
     }
 
-    // validate the minute (goalMinute) for numbers and strings
-    const validNumber =
-      typeof goalMinute === "number" && goalMinute >= 0 && goalMinute <= 90;
-    const validString =
-      typeof goalMinute === "string" &&
-      (goalMinute.startsWith("45+") || goalMinute.startsWith("90+"));
+    // validate the minute (goalMinute) for strings
+    if (typeof goalMinute !== "string") {
+      console.error("goalMinute must be a string: ", goalMinute);
+      return;
+    }
 
-    if (!validNumber && !validString) {
+    const isValidMinute =
+      this.isMinuteFirstHalf(goalMinute) || this.isMinuteSecondHalf(goalMinute);
+
+    if (!isValidMinute) {
       console.error("Invalid minute: ", goalMinute);
       return;
     }
@@ -223,13 +244,16 @@ class Match {
       this.team2Goals[playerName].minute.push(goalMinute);
       this.team2Score++;
     } else {
-      console.error("Player not found: ", playerName);
+      console.log("Player not found: ", playerName);
     }
   }
 
-  // display the score
+  // return the score
   getScore() {
-    return `${this.team1.name} ${this.team1Score} - ${this.team2Score} ${this.team2.name}`;
+    return `${this.team1.name} ${this.scoreString(
+      this.team1Score,
+      this.team2Score
+    )} ${this.team2.name}`;
   }
 }
 
