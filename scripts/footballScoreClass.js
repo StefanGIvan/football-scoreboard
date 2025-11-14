@@ -142,6 +142,9 @@ class Match {
   getTimeline() {
     const timeline = [];
 
+    // ensure per-player minutes are sorted
+    this.sortGoals();
+
     // loop through each team1 player who scored
     for (const player in this.team1Goals) {
       const minutes = this.team1Goals[player].minute;
@@ -185,6 +188,9 @@ class Match {
     const goals = [];
     const teamGoals = teamNumber === 1 ? this.team1Goals : this.team2Goals;
     const teamName = teamNumber === 1 ? this.team1.name : this.team2.name;
+
+    // ensure per-player minutes are sorted
+    this.sortGoals();
 
     for (const player in teamGoals) {
       const minuteGoal = teamGoals[player].minute;
@@ -246,6 +252,9 @@ class Match {
     } else {
       console.log("Player not found: ", playerName);
     }
+
+    // ensure per-player minutes are sorted
+    this.sortGoals();
   }
 
   // return the score
