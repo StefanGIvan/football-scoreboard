@@ -24,25 +24,6 @@ class Match {
     this.team1Score = 0;
     this.team2Score = 0;
   }
-
-  // generate a random minute a player has scored for the match
-  // generate extra time minutes
-  randomMinute() {
-    const generateMinute = Math.random();
-
-    // 20% chance for first half extra time and 20% chance for second half extra time
-    if (generateMinute <= 0.2) {
-      const extraTime = Math.floor(Math.random() * 3) + 1; // numbers: 1-3
-      return `45+${extraTime}`;
-    } else if (generateMinute <= 0.4) {
-      const extraTime = Math.floor(Math.random() * 5) + 1; // numbers: 1- 5
-      return `90+${extraTime}`;
-    }
-
-    //otherwise return the number
-    return Math.floor(Math.random() * 91);
-  }
-
   // method that checks if minute is a number (normal time) or a string (extra time)
   // if that minute is part of first half
   isMinuteFirstHalf(minute) {
@@ -84,7 +65,7 @@ class Match {
     }
 
     // return the result
-    return `${this.team1.name} ${team1HalftimeScore} - ${this.team2.name} ${team2HalftimeScore}`;
+    return `${this.team1.name} ${team1HalftimeScore} - ${team2HalftimeScore} ${this.team2.name}`;
   }
 
   // method that checks if minute is a number (normal time) or a string (extra time)
@@ -128,7 +109,7 @@ class Match {
     }
 
     // return the result
-    return `${this.team1.name} ${team1SecondHalfScore} - ${this.team2.name} ${team2SecondHalfScore}`;
+    return `${this.team1.name} ${team1SecondHalfScore} - ${team2SecondHalfScore} ${this.team2.name}`;
   }
 
   // method to help with sorting strings
@@ -207,9 +188,11 @@ class Match {
   }
 
   // create an object for a player with the minutes when he scorede, without deduplicating the object
-  addGoal({ playerName, minute }) {
-    // assign a random minute if minute is false
-    const goalMinute = minute ?? this.randomMinute();
+  addGoal({ playerName, goalMinute }) {
+    //check the player name
+    if (typeof playerName !== "string") {
+      console.error("Player name not valid: ", playerName);
+    }
 
     // validate the minute (goalMinute) for numbers and strings
     const validNumber =
@@ -287,11 +270,11 @@ const team2 = {
 };
 
 const match = new Match(team1, team2, additionalInformations);
-match.addGoal({ player: "Saka", minute: 23 });
-match.addGoal({ playerName: "Saka", minute: 0 }); // first minute
-match.addGoal({ playerName: "Saka", minute: "45+2" }); // first half extra
-match.addGoal({ playerName: "Rashford", minute: 50 }); // second half
-match.addGoal({ playerName: "Bruno", minute: "90+3" }); // second half extra
+match.addGoal({ playerName: "Saka", goalMinute: 23 });
+match.addGoal({ playerName: "Saka", goalMinute: 0 }); // first minute
+match.addGoal({ playerName: "Saka", goalMinute: "45+2" }); // first half extra
+match.addGoal({ playerName: "Rashford", goalMinute: 50 }); // second half
+match.addGoal({ playerName: "Bruno Fernandes", goalMinute: "90+3" }); // second half extra
 
 match.getScore();
 match.getFirstHalfScore();
