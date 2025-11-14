@@ -26,11 +26,25 @@ class Match {
   }
 
   // generate a random minute a player has scored for the match
+  // generate extra time minutes
   randomMinute() {
+    const generateMinute = Math.random();
+
+    // 20% chance for first half extra time and 20% chance for second half extra time
+    if (generateMinute <= 0.2) {
+      const extraTime = Math.floor(Math.random() * 3) + 1; // numbers: 1-3
+      return `45+${extraTime}`;
+    } else if (generateMinute <= 0.4) {
+      const extraTime = Math.floor(Math.random() * 5) + 1; // numbers: 1- 5
+      return `90+${extraTime}`;
+    }
+
+    //otherwise return the number
     return Math.floor(Math.random() * 91);
   }
 
   // method that checks if minute is a number (normal time) or a string (extra time)
+  // if that minute is part of first half
   isMinuteFirstHalf(minute) {
     if (typeof minute === "number") {
       return minute >= 0 && minute <= 45;
@@ -44,8 +58,7 @@ class Match {
     return false;
   }
 
-  // get the score for both teams at first halftime
-  // count the goals until the 48' minute
+  // get the score for both teams at first halftime (extra time included)
   getFirstHalfScore() {
     let team1HalftimeScore = 0;
     let team2HalftimeScore = 0;
@@ -75,6 +88,7 @@ class Match {
   }
 
   // method that checks if minute is a number (normal time) or a string (extra time)
+  // if that minute is part of second half
   isMinuteSecondHalf(minute) {
     if (typeof minute === "number") {
       return minute >= 46 && minute <= 90;
@@ -88,8 +102,7 @@ class Match {
     return false;
   }
 
-  // get the score for both teams at second halftime
-  // count the goals until the 95' minute
+  // get the score for both teams at second halftime (extra time included)
   getSecondHalfScore() {
     let team1SecondHalfScore = 0;
     let team2SecondHalfScore = 0;
@@ -124,9 +137,9 @@ class Match {
       return minute;
     }
 
-    // used destructuring to attribute for example: 45 and 2
+    // used destructuring to attribute for example: 45 and 2 (string)
     const [base, added] = minute.split("+").map(Number);
-    return base + added;
+    return base + added / 10;
   }
 
   // get the minutes in chronological order (sorts the goals of the whole match)
