@@ -316,8 +316,8 @@ match.addGoal({ playerName: "Saka", goalMinute: "45+2" }); // first half extra
 match.addGoal({ playerName: "Rashford", goalMinute: "50" }); // second half
 match.addGoal({ playerName: "Bruno Fernandes", goalMinute: "90+3" }); // second half extra
 
-console.log(match.getScore());
 console.log(match.getFirstHalfScore());
+console.log(match.getScore());
 console.log(match.getSecondHalfScore());
 console.log(match.getTimeline());
 
