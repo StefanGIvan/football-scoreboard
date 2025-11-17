@@ -23,6 +23,56 @@ class Match {
     // total goals for each team
     this.team1Score = 0;
     this.team2Score = 0;
+
+    // action array for replacements, yellow/red cards, goals
+    this.actions = [];
+  }
+
+  handleActions({ type, player, minute, replacedBy, team }) {
+    const validActions = ["goal", "yellow", "red", "replacement"];
+
+    // validation for type
+    if (!validActions.includes(type)) {
+      console.error("Invalid action type: ", type);
+      return;
+    }
+
+    // validation for minute
+    if (typeof minute !== "string") {
+      console.error("Invalid minute: ", goalMinute);
+      return;
+    }
+
+    // validation for player
+    if (typeof player !== "string") {
+      console.error("Invalid minute or player: ", player);
+      return;
+    }
+
+    // replacement doens't need to be in every action
+    const action = { type, player, minute, team };
+
+    // validate replacement, and if there's no error, push replacedBy
+    if (type === "replacement") {
+      if (typeof replacedBy !== "string" || replacedBy.trim() === "") {
+        console.error("Invalid replacement player:", replacedBy);
+        return;
+      }
+      action.replacedBy = replacedBy;
+    }
+
+    // put before addGoal so we can still log the action
+    this.actions.push(action);
+
+    if (type === "goal") {
+      this.addGoal({ playerName: player, goalMinute: minute });
+    }
+  }
+
+  sortActions() {
+    return this.actions.sort(
+      (a, b) => this.parseMinute(a.minute) - this.parseMinute(b.minute)
+    );
   }
 
   scoreString(scoreTeam1, scoreTeam2) {
@@ -325,3 +375,63 @@ console.log(match.getTeamGoals(1)); // get goals for the first team
 console.log(match.getTeamGoals(2)); // get goals for the second team
 
 console.log("Additional Info:", additionalInformations);
+
+// goal
+match.handleActions({
+  type: "goal",
+  player: "Saka",
+  minute: "23",
+  team: "Arsenal",
+});
+
+// first half extra time goal
+match.handleActions({
+  type: "goal",
+  player: "Saka",
+  minute: "45+2",
+  team: "Arsenal",
+});
+
+// second half goal
+match.handleActions({
+  type: "goal",
+  player: "Rashford",
+  minute: "50",
+  team: "Manchester United",
+});
+
+// second half extra time goal
+match.handleActions({
+  type: "goal",
+  player: "Bruno Fernandes",
+  minute: "90+3",
+  team: "Manchester United",
+});
+
+// yellow card
+match.handleActions({
+  type: "yellow",
+  player: "Rice",
+  minute: "30",
+  team: "Arsenal",
+});
+
+// red card
+match.handleActions({
+  type: "red",
+  player: "Casemiro",
+  minute: "60",
+  team: "Manchester United",
+});
+
+// replacement
+match.handleActions({
+  type: "replacement",
+  player: "Martinelli",
+  replacedBy: "Trossard",
+  minute: "70",
+  team: "Arsenal",
+});
+
+console.log("Actions sorted:");
+console.log(match.sortActions());
