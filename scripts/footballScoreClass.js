@@ -1,5 +1,5 @@
 class Match {
-  constructor(team1, team2, additionalInformations) {
+  constructor(team1, team2, additionalInformations = {}) {
     // save team1 structure
     this.team1 = {
       name: team1.name,
@@ -302,17 +302,26 @@ const team2 = {
   coach: "Amorim",
 };
 
+const additionalInformations = {
+  stadium: {
+    name: "Emirates Stadium",
+  },
+  influx: 60000,
+};
+
 const match = new Match(team1, team2, additionalInformations);
-match.addGoal({ playerName: "Saka", goalMinute: 23 });
-match.addGoal({ playerName: "Saka", goalMinute: 0 }); // first minute
+match.addGoal({ playerName: "Saka", goalMinute: "23" });
+match.addGoal({ playerName: "Saka", goalMinute: "0" }); // first minute
 match.addGoal({ playerName: "Saka", goalMinute: "45+2" }); // first half extra
-match.addGoal({ playerName: "Rashford", goalMinute: 50 }); // second half
+match.addGoal({ playerName: "Rashford", goalMinute: "50" }); // second half
 match.addGoal({ playerName: "Bruno Fernandes", goalMinute: "90+3" }); // second half extra
 
-match.getScore();
-match.getFirstHalfScore();
-match.getSecondHalfScore();
-match.getTimeline();
+console.log(match.getScore());
+console.log(match.getFirstHalfScore());
+console.log(match.getSecondHalfScore());
+console.log(match.getTimeline());
 
-const arsenalGoals = match.getTeamGoals(1); // get goals for the first team
-const unitedGoals = match.getTeamGoals(2); // get goals for the second team
+console.log(match.getTeamGoals(1)); // get goals for the first team
+console.log(match.getTeamGoals(2)); // get goals for the second team
+
+console.log("Additional Info:", additionalInformations);
